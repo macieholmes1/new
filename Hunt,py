@@ -1,0 +1,71 @@
+import random
+
+class Character:
+    def __init__(self, name, health):
+        self.name = name
+        self.health = health
+
+class Vampire(Character):
+    def __init__(self, name):
+        super().__init__(name, health=100)
+
+def main():
+    player_name = input("Enter your name: ")
+    player = Character(player_name, health=100)
+    vampires = [Vampire("Vlad"), Vampire("Carmilla"), Vampire("Dracula")]
+
+    print("Welcome to Vampire Hunt!")
+    print("Your goal is to find and defeat the vampires.")
+    
+    while True:
+        print("\nOptions:")
+        print("1. Search for vampires")
+        print("2. Quit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            location = random.choice(["Forest", "Castle", "Cave"])
+            print(f"You search for vampires in the {location}...")
+            vampire_found = random.random() < 0.4  # 40% chance of finding a vampire
+
+            if vampire_found:
+                vampire = random.choice(vampires)
+                print(f"You encountered {vampire.name}!")
+                fight(player, vampire)
+                vampires.remove(vampire)
+                if not vampires:
+                    print("Congratulations! You've defeated all the vampires!")
+                    break
+            else:
+                print("You didn't find any vampires this time.")
+
+        elif choice == "2":
+            print("Thanks for playing!")
+            break
+        else:
+            print("Invalid choice. Please select again.")
+
+def fight(player, vampire):
+    while player.health > 0 and vampire.health > 0:
+        print(f"{player.name} Health: {player.health}")
+        print(f"{vampire.name} Health: {vampire.health}")
+        action = input("Do you want to attack or defend? ")
+
+        if action.lower() == "attack":
+            vampire.health -= random.randint(10, 20)
+            player.health -= random.randint(5, 15)
+            print(f"You attacked {vampire.name}!")
+        elif action.lower() == "defend":
+            player.health -= random.randint(5, 10)
+            print(f"You defended against {vampire.name}'s attack!")
+        else:
+            print("Invalid action. Choose 'attack' or 'defend'.")
+
+        if vampire.health <= 0:
+            print(f"You defeated {vampire.name}!")
+        elif player.health <= 0:
+            print("You were defeated...")
+            break
+
+if __name__ == "__main__":
+    main()
